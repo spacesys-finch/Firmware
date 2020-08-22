@@ -12,12 +12,13 @@
 #include <STM32_gpio/gpio.h>
 
 #if STM32H743xx
+	#include <STM32H7_hal/hal.h>
 	#include <STM32H7_clock/clock.h>
 #endif
 
 int main() {
 	// Initialization
-	HAL_Init();
+	hal_init();
 	clock_init();
 
 	// Create GPIO instances
