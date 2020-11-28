@@ -1,6 +1,14 @@
 #ifndef __FATFS_SD_H
 #define __FATFS_SD_H
 
+#ifdef STM32G474xx
+#include <stm32g4xx_hal.h>
+#endif
+
+#ifdef STM32H743xx
+#include <stm32h7xx_hal.h>
+#endif
+
 /* Definitions for MMC/SDC command */
 #define CMD0     (0x40+0)     /* GO_IDLE_STATE */
 #define CMD1     (0x40+1)     /* SEND_OP_COND */
@@ -17,6 +25,12 @@
 #define CMD41    (0x40+41)    /* SEND_OP_COND (ACMD) */
 #define CMD55    (0x40+55)    /* APP_CMD */
 #define CMD58    (0x40+58)    /* READ_OCR */
+
+struct sd_handler{
+	SPI_HandleTypeDef spi_handler;
+	GPIO_TypeDef *cs_port;
+	uint16_t cs_pin;
+}typedef sd_handler;
 
 DSTATUS SD_disk_initialize (BYTE pdrv);
 DSTATUS SD_disk_status (BYTE pdrv);

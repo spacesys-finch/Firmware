@@ -2,17 +2,9 @@
 #define FALSE 0
 #define bool BYTE
 
-#include "stm32f1xx_hal.h"
 #include "diskio.h"
 #include "fatfs_sd.h"
 
-
-/* defines for the CS PIN */
-#define SD_CS_GPIO_Port GPIOB
-#define SD_CS_Pin GPIO_PIN_0
-
-/* manage your SPI handler below */
-extern SPI_HandleTypeDef hspi1; 
 
 extern volatile uint8_t Timer1, Timer2;                    /* 10ms Timer decreasing every time */
 
