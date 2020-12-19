@@ -7,6 +7,8 @@
 
 #ifdef STM32H743xx
 #include <stm32h7xx_hal.h>
+#include <stm32h7xx_hal_spi.h>
+#include <stm32h7xx_hal_spi_ex.h>
 #endif
 
 /* Definitions for MMC/SDC command */
@@ -32,11 +34,11 @@ struct sd_handler{
 	uint16_t cs_pin;
 }typedef sd_handler;
 
-DSTATUS SD_disk_initialize (BYTE pdrv);
+DSTATUS SD_disk_initialize (sd_handler* sd_card_handler, BYTE pdrv);
 DSTATUS SD_disk_status (BYTE pdrv);
-DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
-DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
-DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
+DRESULT SD_disk_read (sd_handler *sd_card_handler, BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
+DRESULT SD_disk_write (sd_handler *sd_card_handler, BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
+DRESULT SD_disk_ioctl (sd_handler *sd_card_handler, BYTE pdrv, BYTE cmd, void* buff);
 
 #define SPI_TIMEOUT 1000
 
