@@ -1,6 +1,10 @@
 #ifndef __FATFS_SD_H
 #define __FATFS_SD_H
 
+#include "integer.h"
+#include "diskio.h"
+#include <drivers/STM32_gpio/gpio.h>
+
 #ifdef STM32G474xx
 #include <stm32g4xx_hal.h>
 #endif
@@ -30,15 +34,17 @@
 
 struct sd_handler{
 	SPI_HandleTypeDef spi_handler;
-	GPIO_TypeDef *cs_port;
-	uint16_t cs_pin;
+	GPIO_OUTPUT cs;
 }typedef sd_handler;
 
-DSTATUS SD_disk_initialize (sd_handler* sd_card_handler, BYTE pdrv);
+sd_handler sd_card_handler;
+
+void init_sd_card_handler(SPI_HandleTypeDef spi_handler, GPIO_TypeDef *cs_port, uint16_t cs_pin);
+DSTATUS SD_disk_initialize (BYTE pdrv);
 DSTATUS SD_disk_status (BYTE pdrv);
-DRESULT SD_disk_read (sd_handler *sd_card_handler, BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
-DRESULT SD_disk_write (sd_handler *sd_card_handler, BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
-DRESULT SD_disk_ioctl (sd_handler *sd_card_handler, BYTE pdrv, BYTE cmd, void* buff);
+DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
+DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
+DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
 #define SPI_TIMEOUT 1000
 
