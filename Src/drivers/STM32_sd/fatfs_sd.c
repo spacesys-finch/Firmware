@@ -5,8 +5,7 @@
 #include "diskio.h"
 #include "fatfs_sd.h"
 
-
-extern volatile uint8_t Timer1, Timer2;                    /* 10ms Timer decreasing every time */
+extern volatile uint8_t SD_Timer1, SD_Timer2;                    /* 10ms Timer decreasing every time */
 
 static volatile DSTATUS Stat = STA_NOINIT;              /* Disc Status Flag*/
 static uint8_t CardType;                                /* SD type 0:MMC, 1:SDC, 2:Block addressing */
@@ -61,7 +60,7 @@ static uint8_t SD_ReadyWait()
   uint8_t res;
   
   /* 500ms Counter preparation*/
-  Timer2 = 50;
+  SD_Timer2 = 50;
 
   SPI_RxByte();
   
@@ -69,7 +68,7 @@ static uint8_t SD_ReadyWait()
   {
     /* 0xFF SPI communication until a value is received */
     res = SPI_RxByte();
-  } while ((res != 0xFF) && Timer2);
+  } while ((res != 0xFF) && SD_Timer2);
   
   return res;
 }
@@ -136,13 +135,13 @@ static bool SD_RxDataBlock(BYTE *buff, UINT btr)
   uint8_t token;
   
   /* 100ms 타이머 */
-  Timer1 = 10;
+  SD_Timer1 = 10;
 
   /* 응답 대기 */		
   do 
   {    
     token = SPI_RxByte();
-  } while((token == 0xFF) && Timer1);
+  } while((token == 0xFF) && SD_Timer1);
   
   /* 0xFE 이외 Token 수신 시 에러 처리 */
   if(token != 0xFE)
@@ -285,7 +284,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
   if (SD_SendCmd(CMD0, 0) == 1)
   { 
     /* 타이머 1초 설정 */
-    Timer1 = 100;
+    SD_Timer1 = 100;
     
     /* SD 인터페이스 동작 조건 확인 */
     if (SD_SendCmd(CMD8, 0x1AA) == 1)
@@ -302,9 +301,9 @@ DSTATUS SD_disk_initialize(BYTE drv)
         do {
           if (SD_SendCmd(CMD55, 0) <= 1 && SD_SendCmd(CMD41, 1UL << 30) == 0)
             break; /* ACMD41 with HCS bit */
-        } while (Timer1);
+        } while (SD_Timer1);
         
-        if (Timer1 && SD_SendCmd(CMD58, 0) == 0)
+        if (SD_Timer1 && SD_SendCmd(CMD58, 0) == 0)
         { 
           /* Check CCS bit */
           for (n = 0; n < 4; n++)
@@ -332,9 +331,9 @@ DSTATUS SD_disk_initialize(BYTE drv)
           if (SD_SendCmd(CMD1, 0) == 0)
             break; /* CMD1 */
         }
-      } while (Timer1);
+      } while (SD_Timer1);
       
-      if (!Timer1 || SD_SendCmd(CMD16, 512) != 0)
+      if (!SD_Timer1 || SD_SendCmd(CMD16, 512) != 0)
       {
         /* 블럭 길이 선택 */
         type = 0;

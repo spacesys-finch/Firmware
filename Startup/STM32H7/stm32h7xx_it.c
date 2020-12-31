@@ -67,6 +67,21 @@
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
+
+volatile uint8_t FatFsCnt = 0;
+volatile uint8_t SD_Timer1, SD_Timer2;
+/**
+  * @brief This function handles SD card timers.
+  */
+void SDTimer_Handler(void)
+{
+  if(SD_Timer1 > 0)
+    SD_Timer1--;
+
+  if(SD_Timer2 > 0)
+    SD_Timer2--;
+}
+
 /**
   * @brief This function handles Non maskable interrupt.
   */
@@ -185,7 +200,11 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+  FatFsCnt++;
+  if(FatFsCnt >= 10){
+    FatFsCnt = 0;
+    SDTimer_Handler();
+  }
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
