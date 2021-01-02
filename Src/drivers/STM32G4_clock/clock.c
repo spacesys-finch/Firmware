@@ -86,4 +86,14 @@ void GPIOClock_Config(void) {
   __HAL_RCC_GPIOB_CLK_ENABLE();
 }
 
+void SPIClock_Config(SPI_HandleTypeDef* hspi){
+  if(hspi->Instance==SPI1)
+    __HAL_RCC_SPI1_CLK_ENABLE();
+  else if(hspi->Instance==SPI2)
+    __HAL_RCC_SPI2_CLK_ENABLE();
+  else if(hspi->Instance==SPI3)
+    __HAL_RCC_SPI3_CLK_ENABLE();
+  else
+    Error_Handler();
+}
 #endif

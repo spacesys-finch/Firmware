@@ -11,10 +11,11 @@
 #ifdef STM32H743xx
 #include <stm32h7xx_hal.h>
 #include <stm32h7_startup.h>
-#endif
 
 void clock_init(void);
 void SystemClock_Config(void);
 void GPIOClock_Config(void);
+void SPIClock_Config(SPI_HandleTypeDef* hspi);
+#endif
 
 #endif /* SYS_CLK_H_ */
