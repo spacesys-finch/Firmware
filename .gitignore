@@ -57,6 +57,10 @@ Core/**
 .mxproject
 **/.settings/**
 mx.scratch
+.metadata/**
+RemoteSystemsTempFiles/**
+.project
+.cproject
 
 # CMake build folder
 Build*
