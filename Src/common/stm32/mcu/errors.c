@@ -18,7 +18,7 @@ void Error_Handler(void)
     if (g_log_def == NULL) {
         return;
     }
-    error(g_log_def, "Generic error occurred, see Error_Handler() in errors.c");
+    error(g_log_def, "Generic error occurred, see %s() in %s", __FUNCTION__, __FILE__);
 }
 
 #ifdef  USE_FULL_ASSERT

@@ -37,9 +37,12 @@ int main() {
     Error_Handler();
     assert_param(1);
     assert_param(0);
-    assert_failed(__FILE__, __LINE__);
+    // Must cast __FILE__ or else it produces the warning "pointer targets in
+    // passing argument 1 of 'assert_failed' differ in signedness [-Wpointer-sign]"
+    assert_failed((uint8_t*) __FILE__, __LINE__);
 
 	info(&log, "Done MCU errors test");
+	while (1) {}
 
     return 0;
 }
